@@ -1,3 +1,6 @@
+# The home directory is always:
+# /home/runner/work/dbt-playbook/dbt-playbook/
+
 name: ci
 
 on: push
@@ -22,6 +25,6 @@ jobs:
           mkdir ~/.dbt
           printenv BQ_SECRET >test.json
           cat test.json
-      - name: Debug dbt
+      - name: Check home
         run: |
-          pwd
+          echo $HOME
