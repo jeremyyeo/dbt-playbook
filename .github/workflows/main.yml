@@ -8,6 +8,7 @@ jobs:
     steps:
       - name: Write secret to location
         env:
-          bq_secret: ${{ secrets.BIGQUERY_TEST_SERVICE_ACCOUNT_JSON }}
+          BQ_SECRET: ${{ secrets.BIGQUERY_TEST_SERVICE_ACCOUNT_JSON }}
         run: |
-          echo $bq_secret
+          printenv BQ_SECRET >test.json
+          cat test.json
