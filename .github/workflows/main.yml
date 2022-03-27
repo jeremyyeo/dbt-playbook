@@ -6,9 +6,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8.10"
+      - name: Install dependencies
+        run: |
+          pip install dbt-core dbt-bigquery
       - name: Write secret to location
         env:
           BQ_SECRET: ${{ secrets.BIGQUERY_TEST_SERVICE_ACCOUNT_JSON }}
         run: |
+          mkdir ~/.dbt
           printenv BQ_SECRET >test.json
           cat test.json
+      - name: Debug dbt
+        run: |
+          dbt init
+          dbt debug
