@@ -1,0 +1,13 @@
+name: ci
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write secret to location
+        env:
+          bq_secret: ${{ secrets.BIGQUERY_TEST_SERVICE_ACCOUNT_JSON }}
+        run: |
+          echo $bq_secret
