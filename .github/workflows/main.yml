@@ -30,8 +30,8 @@ jobs:
           python-version: "3.8.10"
       - name: Install PostgreSQL client
         run: |
-          apt-get update
-          apt-get install --yes postgresql-client
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
       - name: Query database
         run: psql -h locahost -d postgres_db -U user -c 'SELECT 1;'
         env:
