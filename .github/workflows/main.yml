@@ -1,4 +1,4 @@
-# The home directory is always:
+# The working directory is always:
 # /home/runner/work/dbt-playbook/dbt-playbook/
 
 name: ci
@@ -8,23 +8,31 @@ on: push
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres_db
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: user
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: "3.8.10"
-      - name: Install dependencies
+      - name: Install PostgreSQL client
         run: |
-          pip install dbt-core dbt-bigquery
-      - name: Write secret to location
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Query database
+        run: psql -h locahost -d postgres_db -U user -c 'SELECT 1;'
         env:
-          BQ_SECRET: ${{ secrets.BIGQUERY_TEST_SERVICE_ACCOUNT_JSON }}
-        run: |
-          pwd
-          ls -la
-          mkdir ~/.dbt
-          printenv BQ_SECRET >test.json
-          cat test.json
-      - name: Check home
-        run: |
-          echo $HOME
+          PGPASSWORD: password
