@@ -8,7 +8,7 @@ cwd = os.getcwd()
 def test_debug():
     assert (
         os.system(
-            f"dbt debug --profiles-dir {cwd}/.dbt --project-dir {tests_path}/my_dbt_project"
+            f"dbt debug --profiles-dir {cwd}/.dbt --project-dir {tests_path}/../my_dbt_project"
         )
         == 0
     )
