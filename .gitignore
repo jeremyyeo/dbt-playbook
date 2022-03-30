@@ -158,7 +158,12 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 
+.vscode/
+
 **/dbt_packages/
 **/dbt_modules/
 **/target/
 **/logs/
+**/.user.yml
+
+.python-version
