@@ -22,3 +22,13 @@ snowflake:
       database: development
       warehouse: transforming
       schema: dbt_playbook
+
+bigquery:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      dataset: dbt_playbook
+      project: "{{ env_var('BIGQUERY_PROJECT_ID') }}"
+      keyfile: /home/runner/work/dbt-playbook/dbt-playbook/credentials.json
