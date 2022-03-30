@@ -8,12 +8,29 @@ postgres:
       password: password
       port: 5432
       dbname: postgres
-      schema: public
+      schema: dbt_jdoe_public
+    prod:
+      type: postgres
+      host: localhost
+      user: root
+      password: password
+      port: 5432
+      dbname: postgres
+      schema: jdoe_public
 
 snowflake:
   target: dev
   outputs:
     dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_TEST_ACCOUNT') }}"
+      user: jyeo_integration
+      password: "{{ env_var('SNOWFLAKE_TEST_PASSWORD') }}"
+      role: transformer
+      database: development
+      warehouse: transforming
+      schema: dbt_jdoe_dbt_playbook
+    prod:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_TEST_ACCOUNT') }}"
       user: jyeo_integration
@@ -30,5 +47,11 @@ bigquery:
       type: bigquery
       method: service-account
       dataset: dbt_playbook
+      project: "{{ env_var('BIGQUERY_PROJECT_ID') }}"
+      keyfile: /home/runner/work/dbt-playbook/dbt-playbook/credentials.json
+    prod:
+      type: bigquery
+      method: service-account
+      dataset: dbt_jdoe_dbt_playbook
       project: "{{ env_var('BIGQUERY_PROJECT_ID') }}"
       keyfile: /home/runner/work/dbt-playbook/dbt-playbook/credentials.json
