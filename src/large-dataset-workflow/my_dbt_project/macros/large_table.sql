@@ -24,7 +24,7 @@
   {%- set preexisting_backup_relation = adapter.get_relation(identifier=backup_identifier,
                                                              schema=schema,
                                                              database=database) -%}
-  {%- if var('include_large_tables', False) -%}
+  {%- if var('include_large_tables', False) or target.name == 'prod' -%}
 
     {{ drop_relation_if_exists(preexisting_intermediate_relation) }}
     {{ drop_relation_if_exists(preexisting_backup_relation) }}
@@ -54,6 +54,7 @@
     {{ drop_relation_if_exists(backup_relation) }}
 
     {{ run_hooks(post_hooks, inside_transaction=False) }}
+
   {%- else -%}
 
     {%- do log('[SKIPPING <large_table> materialization ' ~ target_relation ~ ' | var("include_large_tables") is False]', True) -%}
@@ -76,7 +77,7 @@
   {%- set identifier = model['alias'] -%}
   {%- set target_relation = api.Relation.create(database=database, schema=schema, identifier=identifier, type='table') -%}
 
-  {%- if var('include_large_tables', False) -%}
+  {%- if var('include_large_tables', False) or target.name == 'prod' -%}
 
       {%- set old_relation = adapter.get_relation(database=database, schema=schema, identifier=identifier) -%}
       {%- set exists_not_as_table = (old_relation is not none and not old_relation.is_table) -%}
@@ -132,7 +133,7 @@
   {%- set old_relation = adapter.get_relation(database=database, schema=schema, identifier=identifier) -%}
   {%- set target_relation = api.Relation.create(identifier=identifier, schema=schema, database=database, type='table') -%}
 
-  {%- if var('include_large_tables', False) -%}
+  {%- if var('include_large_tables', False) or target.name == 'prod' -%}
 
     {{ run_hooks(pre_hooks) }}
 
@@ -154,6 +155,7 @@
 
     {% do unset_query_tag(original_query_tag) %}
   {%- else -%}
+
     {%- do log('[SKIPPING <large_table> materialization ' ~ target_relation ~ ' | var("include_large_tables") is False]', True) -%}
 
     -- dont build model
