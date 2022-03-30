@@ -17,7 +17,7 @@ def test_prod_run():
 def test_dev_run():
     assert (
         os.system(
-            f"dbt run --target dev --profiles-dir {cwd}/.dbt --project-dir {tests_path}/../my_dbt_projec"
+            f"dbt run --target dev --profiles-dir {cwd}/.dbt --project-dir {tests_path}/../my_dbt_project"
         )
         == 0
     )
