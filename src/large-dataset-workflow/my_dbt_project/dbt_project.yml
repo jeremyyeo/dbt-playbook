@@ -1,0 +1,17 @@
+name: "my_dbt_project"
+version: "1.0.0"
+config-version: 2
+
+profile: "{{ env_var('ADAPTER') }}"
+
+models:
+  my_dbt_project:
+    +materialized: table
+    shared:
+      +schema: shared
+      +materialized: large_table
+    marketing:
+      +schema: marketing
+
+vars:
+  include_large_table: False
