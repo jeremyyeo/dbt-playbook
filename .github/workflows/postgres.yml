@@ -1,7 +1,7 @@
 # The working directory is always:
 # /home/runner/work/dbt-playbook/dbt-playbook/
 
-name: ci
+name: postgres:latest
 
 on: push
 
@@ -29,14 +29,6 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.8.10"
-      # - name: Install psql client
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install --yes postgresql-client
-      # - name: Query database
-      #   run: psql -h localhost -d postgres -U root -c 'SELECT 1;'
-      #   env:
-      #     PGPASSWORD: password
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
