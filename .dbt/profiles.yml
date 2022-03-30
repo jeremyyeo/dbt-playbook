@@ -9,3 +9,16 @@ postgres:
       port: 5432
       dbname: postgres
       schema: public
+
+snowflake:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_TEST_ACCOUNT') }}"
+      user: jyeo_integration
+      password: "{{ env_var('SNOWFLAKE_TEST_PASSWORD') }}"
+      role: transformer
+      database: development
+      warehouse: transforming
+      schema: dbt_playbook
