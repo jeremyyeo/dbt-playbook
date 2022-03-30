@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ADAPTER: snowflake
+      SNOWFLAKE_TEST_ACCOUNT: ${{ secrets.SNOWFLAKE_TEST_ACCOUNT }}
+      SNOWFLAKE_TEST_PASSWORD: ${{ secrets.SNOWFLAKE_TEST_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
