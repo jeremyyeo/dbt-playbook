@@ -4,28 +4,28 @@
   {%- set identifier = model['alias'] -%}
   {%- set tmp_identifier = model['name'] + '__dbt_tmp' -%}
   {%- set backup_identifier = model['name'] + '__dbt_backup' -%}
-  
+  {%- set old_relation = adapter.get_relation(database=database, schema=schema, identifier=identifier) -%}
+  {%- set target_relation = api.Relation.create(identifier=identifier,
+                                                schema=schema,
+                                                database=database,
+                                                type='table') -%}
+  {%- set intermediate_relation = api.Relation.create(identifier=tmp_identifier,
+                                                      schema=schema,
+                                                      database=database,
+                                                      type='table') -%}
+  {%- set preexisting_intermediate_relation = adapter.get_relation(identifier=tmp_identifier,
+                                                                   schema=schema,
+                                                                   database=database) -%}
+  {%- set backup_relation_type = 'table' if old_relation is none else old_relation.type -%}
+  {%- set backup_relation = api.Relation.create(identifier=backup_identifier,
+                                                schema=schema,
+                                                database=database,
+                                                type=backup_relation_type) -%}
+  {%- set preexisting_backup_relation = adapter.get_relation(identifier=backup_identifier,
+                                                             schema=schema,
+                                                             database=database) -%}
   {%- if var('include_large_tables', False) -%}
-    {%- set old_relation = adapter.get_relation(database=database, schema=schema, identifier=identifier) -%}
-    {%- set target_relation = api.Relation.create(identifier=identifier,
-                                                  schema=schema,
-                                                  database=database,
-                                                  type='table') -%}
-    {%- set intermediate_relation = api.Relation.create(identifier=tmp_identifier,
-                                                        schema=schema,
-                                                        database=database,
-                                                        type='table') -%}
-    {%- set preexisting_intermediate_relation = adapter.get_relation(identifier=tmp_identifier,
-                                                                     schema=schema,
-                                                                     database=database) -%}
-    {%- set backup_relation_type = 'table' if old_relation is none else old_relation.type -%}
-    {%- set backup_relation = api.Relation.create(identifier=backup_identifier,
-                                                  schema=schema,
-                                                  database=database,
-                                                  type=backup_relation_type) -%}
-    {%- set preexisting_backup_relation = adapter.get_relation(identifier=backup_identifier,
-                                                               schema=schema,
-                                                               database=database) -%}
+
     {{ drop_relation_if_exists(preexisting_intermediate_relation) }}
     {{ drop_relation_if_exists(preexisting_backup_relation) }}
 
@@ -129,11 +129,10 @@
 
   {%- set original_query_tag = set_query_tag() -%}
   {%- set identifier = model['alias'] -%}
+  {%- set old_relation = adapter.get_relation(database=database, schema=schema, identifier=identifier) -%}
+  {%- set target_relation = api.Relation.create(identifier=identifier, schema=schema, database=database, type='table') -%}
 
   {%- if var('include_large_tables', False) -%}
-
-    {%- set old_relation = adapter.get_relation(database=database, schema=schema, identifier=identifier) -%}
-    {%- set target_relation = api.Relation.create(identifier=identifier, schema=schema, database=database, type='table') -%}
 
     {{ run_hooks(pre_hooks) }}
 
