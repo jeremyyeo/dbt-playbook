@@ -12,6 +12,8 @@ models:
       +materialized: large_table
     marketing:
       +schema: marketing
+    sales:
+      +schema: sales
 
 vars:
   include_large_table: False
